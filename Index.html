@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Para Ti ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 50%, #ffe5ec 100%);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- DECORACIONES FIJAS DE FONDO --- */
+        .background-decor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.85;
+            z-index: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            animation: floatDecor 4s ease-in-out infinite alternate;
+        }
+
+        .decor-top-left { top: 20px; left: 20px; font-size: 3rem; }
+        .decor-top-right { top: 20px; right: 20px; font-size: 3rem; }
+        .decor-bottom-left { bottom: 20px; left: 20px; font-size: 4rem; }
+        .decor-bottom-right { bottom: 20px; right: 20px; font-size: 4rem; }
+        .decor-side-left { top: 50%; left: 5%; transform: translateY(-50%); font-size: 3.5rem; animation-delay: 1s; }
+        .decor-side-right { top: 50%; right: 5%; transform: translateY(-50%); font-size: 3.5rem; animation-delay: 2s; }
+
+        @keyframes floatDecor {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        /* --- LLUVIA --- */
+        #rain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .falling-element {
+            position: absolute;
+            top: -50px;
+            font-size: var(--size);
+            opacity: var(--opacity);
+            animation: fall var(--duration) linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: var(--opacity); }
+            90% { opacity: var(--opacity); }
+            100% { transform: translateY(110vh) rotate(var(--rotation)); opacity: 0; }
+        }
+
+        /* --- TARJETA CENTRAL Y OSOS LATERALES --- */
+        .card-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .side-bear {
+            font-size: 5.5rem;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15));
+            animation: sway 3s ease-in-out infinite alternate;
+        }
+        .side-bear.left { animation-delay: 0.5s; }
+        .side-bear.right { animation-delay: 1.5s; }
+
+        @keyframes sway {
+            0% { transform: rotate(-5deg) scale(1); }
+            100% { transform: rotate(5deg) scale(1.05); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.3);
+            text-align: center;
+            max-width: 430px;
+            width: 90%;
+            border: 4px solid #ffb3c1;
+            position: relative;
+        }
+
+        .card-header-decor {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ff4d6d;
+        }
+
+        .bears-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 2.8rem;
+        }
+
+        .main-heart-btn {
+            background: none;
+            border: none;
+            font-size: 6rem;
+            cursor: pointer;
+            outline: none;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+            transition: transform 0.2s ease;
+            margin: 15px 0;
+            filter: drop-shadow(0 5px 10px rgba(255,0,0,0.3));
+        }
+
+        .main-heart-btn:hover {
+            animation: none;
+            transform: scale(1.15);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .instruction {
+            color: #ff758f;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        .message-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 1s ease-in-out;
+            margin-top: 0;
+        }
+
+        .message-box.show {
+            max-height: 300px;
+            margin-top: 25px;
+        }
+
+        .message-text {
+            color: #c9184a;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            font-weight: 600;
+            background: #fff0f3;
+            padding: 20px;
+            border-radius: 20px;
+            border-left: 6px solid #ff4d6d;
+            border-right: 6px solid #ff4d6d;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        #bg-music { display: none; }
+
+        @media (max-width: 768px) {
+            .side-bear { display: none; }
+            .background-decor { font-size: 2.5rem; }
+            .decor-side-left, .decor-side-right { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Decoraciones del entorno -->
+    <div class="background-decor decor-top-left">🌹🌿</div>
+    <div class="background-decor decor-top-right">🌿🌹</div>
+    <div class="background-decor decor-bottom-left">🧸💐</div>
+    <div class="background-decor decor-bottom-right">💐🧸</div>
+    <div class="background-decor decor-side-left">🌹</div>
+    <div class="background-decor decor-side-right">🌹</div>
+
+    <!-- Efecto lluvia continua -->
+    <div id="rain-container"></div>
+
+    <!-- Estructura de la Carta -->
+    <div class="card-wrapper">
+        <div class="side-bear left">🧸<br>🌹</div>
+
+        <div class="card">
+            <div class="card-header-decor">🌹🍃🌸🍃🌹</div>
+            <div class="bears-container">
+                <span>🧸</span>
+                <span>💖</span>
+                <span>🧸</span>
+            </div>
+            
+            <h1>Tengo algo que decirte...</h1>
+            <p class="instruction">Haz clic en el corazón</p>
+
+            <button class="main-heart-btn" id="heartBtn" onclick="revealSecret()">❤️</button>
+
+            <div class="message-box" id="messageBox">
+                <p class="message-text">
+                    Sabes... me gustas mucho. No como un amor pasajero de esos que se van con el tiempo; quiero una oportunidad real para cuidar, valorar y ganarme un lugar bonito en tu corazón. ✨
+                </p>
+            </div>
+        </div>
+
+        <div class="side-bear right">🌹<br>🧸</div>
+    </div>
+
+    <!-- REPRODUCTOR DE MÚSICA -->
+    <!-- Cambia "mi_musica.mp3" por el nombre de tu archivo descargado -->
+    <audio id="bg-music" loop>
+        <source src="Josean Log - Doma (Lyric Video).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Lluvia de corazones, osos y rosas
+        const rainContainer = document.getElementById('rain-container');
+        const rainElements = ['❤️', '💖', '💝', '🧸', '🌹', '🌸', '🍃'];
+
+        function createFallingElement() {
+            const element = document.createElement('div');
+            element.classList.add('falling-element');
+            element.innerText = rainElements[Math.floor(Math.random() * rainElements.length)];
+            
+            const randomLeft = Math.random() * 100;
+            const randomSize = Math.random() * (35 - 15) + 15;
+            const randomDuration = Math.random() * (7 - 4) + 4;
+            const randomOpacity = Math.random() * (1 - 0.5) + 0.5;
+            const randomRotation = Math.random() * 720 - 360;
+
+            element.style.left = `${randomLeft}vw`;
+            element.style.setProperty('--size', `${randomSize}px`);
+            element.style.setProperty('--duration', `${randomDuration}s`);
+            element.style.setProperty('--opacity', randomOpacity);
+            element.style.setProperty('--rotation', `${randomRotation}deg`);
+
+            rainContainer.appendChild(element);
+
+            setTimeout(() => { element.remove(); }, randomDuration * 1000);
+        }
+
+        setInterval(createFallingElement, 200);
+
+        // Acción del botón
+        function revealSecret() {
+            document.getElementById('messageBox').classList.add('show');
+            
+            const heartBtn = document.getElementById('heartBtn');
+            heartBtn.innerText = '🥰';
+            heartBtn.style.animation = 'none';
+            heartBtn.style.transform = 'scale(1.1)';
+
+            // Ejecuta el audio de fondo
+            document.getElementById('bg-music').play().catch(err => {
+                console.log("Audio en espera de interacción.");
+            });
+        }
+    </script>
+</body>
+</html>
